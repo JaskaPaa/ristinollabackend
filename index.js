@@ -1,11 +1,18 @@
+import express from "express";
 
-const express = require('express')
+// Define "require"
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+//const express = require('express')
 const app = express()
 
 const cors = require('cors')
 app.use(cors())
 
 app.use(express.json())
+
+import * as AI from "./AI.js";
 
 app.get('/', (req, res) => {
     res.send('{"foo": "bar"}')
@@ -25,26 +32,29 @@ app.get('/api/position/:pos', (request, response) => {
 
 })
 
+function strToSquares(str) {
+
+}
+
 app.post('/api/position', (request, response) => {
     const body = request.body
   
     console.log("--------------------------------");  
-    console.log(request.headers);
-    console.log(body);
-    let test = {body: JSON.stringify({
-      foo: "bar"
-})};
+    //console.log(request.headers);
+    //console.log(body);
   
-  
-  
-    console.log(test.body);
-  
-    if (!body.foo) {
+    if (!body.squares) {
         return response.status(400).json({ 
-            error: 'content missing' 
+            error: 'squares missing' 
         })
     }
-  
+    console.log(typeof body.squares);
+    console.log(body.squares[7][6]);
+
+    let move = AI.playMove(body.squares);
+    //let sqs = JSON.parse(body.squares);
+    console.log(move);
+
     
     response.json(JSON.stringify({bar: "foo"}))
   })
