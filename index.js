@@ -1,18 +1,14 @@
-import express from "express";
 
-// Define "require"
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
 
-//const express = require('express')
+const AI = require('./AI.js');
+
+const express = require('express')
 const app = express()
 
 const cors = require('cors')
 app.use(cors())
 
 app.use(express.json())
-
-import * as AI from "./AI.js";
 
 app.get('/', (req, res) => {
     res.send('{"foo": "bar"}')
@@ -32,6 +28,8 @@ app.get('/api/position/:pos', (request, response) => {
 
 })
 
+/* Mitkä pitää olla palvelimella, mitkä client'illa ?? */
+
 function strToSquares(str) {
 
 }
@@ -48,18 +46,19 @@ app.post('/api/position', (request, response) => {
             error: 'squares missing' 
         })
     }
-    console.log(typeof body.squares);
-    console.log(body.squares[7][6]);
+    
+    console.log(body.nextMove);
 
-    let move = AI.playMove(body.squares);
+    let move = AI.playMove(body.squares, body.nextMove);
     //let sqs = JSON.parse(body.squares);
     console.log(move);
 
     
-    response.json(JSON.stringify({bar: "foo"}))
-  })
+    response.json(JSON.stringify(move))
+})
   
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
+

@@ -1,12 +1,23 @@
 
 let sq;
 let size;
+let inTurn = 'O';
 
-export function playMove(squares) {
+module.exports = {
+    playMove: (squares, nextMove) => playMove(squares, nextMove),
+    checkFive: (x, y, squares) => checkFive (x, y, squares),
+    checkDraw: (squares) => checkDraw(squares)
+};
+
+function playMove(squares, nextMove) {
 
     let moves = [];
     sq = squares.slice();
     size = sq.length;
+
+    inTurn = nextMove;
+
+    console.log(inTurn);
 
     for(var i = 0; i < sq.length; i++) {
         var row = sq[i];
@@ -21,7 +32,7 @@ export function playMove(squares) {
     if (moves.length === size*size)
         return {x: Math.round(size/2)-1, y:  Math.round(size/2)-1}; // AI plays the first move
 
-    return {x: moves[0].move[0], y:  moves[0].move[1]};
+    return {x: moves[0].move[0], y:  moves[0].move[1], mark: inTurn};
 }
 
 function squareValue2(x, y) {
@@ -64,7 +75,7 @@ function from_to(x, y, step_x, step_y, len) {
 function row_value(str, c) {
     var f, i;
     str = str.replace(/_/g, '-');
-    f = (c === "O") ? 1 : 0;
+    f = (c === inTurn) ? 1 : 0;
     if ((i = str.search(c + c + c + c + c)) !== -1) {
       return 100000 + f * 10000;
     }
@@ -106,7 +117,7 @@ function row_value(str, c) {
 
 /* --- End of AI ------- */
 
-export function checkFive (x, y, squares) {
+function checkFive (x, y, squares) {
     var i, str, xs, ys;
 
     if (x === -1)
@@ -194,7 +205,7 @@ function winnerLineAllSquares(line) {
 
 }
 
-export function checkDraw(squares) {
+function checkDraw(squares) {
 
   let moves = [];
   sq = squares.slice();
